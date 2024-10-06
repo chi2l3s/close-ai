@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js Объемные Градиентные Волны с Призмой</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+        body { margin: 0; overflow: hidden; font-family: 'Montserrat', sans-serif; }
+        canvas { display: block; }
+        header {
+            position: absolute;
+            top: -100px; /* Начальная позиция выше экрана */
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0; /* Скрываем заголовок изначально */
+            transition: top 0.5s ease, opacity 0.5s ease; /* Плавный переход для top и opacity */
+            padding: 20px;
+            width: 80%; /* Ширина заголовка */
+            text-align: center; /* Центрируем текст */
+            color: white; /* Цвет текста заголовка */
+        }
+        nav {
+            margin: 10px 0;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: white; /* Цвет ссылок в навигации */
+        }
+        #try-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #8312d5;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            opacity: 0; /* Скрываем кнопку изначально */
+            transform-origin: center;
+            transition: opacity 0.9s ease, transform 0.9s ease; /* Плавный переход для opacity и transform */
+            position: absolute;
+            top: 50%; /* Центрируем по вертикали */
+            left: 50%; /* Центрируем по горизонтали */
+            transform: translate(-50%, -50%); /* Центрируем кнопку */
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        const layers = 5; // Количество слоев
+        const planes = [];
+        const planeWidth = window.innerWidth;
+        const planeHeight = 5; // Высота плоскости
+
+        for (let i = 0; i < layers; i++) {
+            const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight, 100, 100);
+            const material = new THREE.MeshBasicMaterial({ 
+                side: THREE.DoubleSide, 
+                wireframe: true 
+            });
+            const plane = new THREE.Mesh(geometry, material);
+            plane.position.z = i * 0.2; // Смещение по оси Z для создания объема
+            scene.add(plane);
+            planes.push(plane);
+        }
+
+        // Создание призмы
+        const prismGeometry = new THREE.CylinderGeometry(1, 1, 3, 4);
+        const prismMaterial = new THREE.MeshBasicMaterial({ color: '#8312d5', wireframe: true });
+        const prism = new THREE.Mesh(prismGeometry, prismMaterial);
+        scene.add(prism);
+
+        camera.position.z = 10;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const time = Date.now() * 0.001; // Уменьшаем скорость времени
+
+            planes.forEach((plane, index) => {
+                const positionAttribute = plane.geometry.attributes.position;
+
+                for (let i = 0; i < positionAttribute.count; i++) {
+                    const x = (i % 101) / 10 - 5; // Упрощаем расчет по X
+                    // Создаем эффект волны: одна сторона выше, другая ниже
+                    const waveHeight = Math.sin(x + time + index * Math.PI) * (1 + index * 0.2); // Увеличиваем амплитуду
+                    positionAttribute.setY(i, waveHeight);
+                }
+
+                positionAttribute.needsUpdate = true;
+
+                // Изменяем цвет в зависимости от высоты
+                const colorValue = (Math.sin(time + index) + 1) / 2;
+                plane.material.color = new THREE.Color(colorValue, 0.5, 1 - colorValue);
+            });
+
+            // Вращение и пульсация призмы
+            prism.rotation.y += 0.01; // Вращение
+            const scale = 1 + 0.1 * Math.sin(time); // Пульсация
+            prism.scale.set(scale, scale, scale);
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            planes.forEach(plane => {
+                plane.geometry.dispose(); // Удаляем старую геометрию
+                plane.geometry = new THREE.PlaneGeometry(window.innerWidth, 10, 100, 100); // Создаем новую геометрию
+            });
+        });
+    </script>
+
+    <header>
+        <h1><strong>closeai</strong></h1>
+        <nav>
+            <a href="#">Главная</a>
+            <a href="#">О нас</a>
+            <a href="#">Контакты</a>
+        </nav>
+    </header>
+    
+    <button id="try-button">Try U-GPT</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('header');
+            const button = document.getElementById('try-button');
+
+            // Показать заголовок через 3 секунды
+            setTimeout(() => {
+                header.style.top = '20px'; // Позиция заголовка при появлении
+                header.style.opacity = '1'; // Показываем заголовок
+                button.style.opacity = '1'; // Показываем кнопку
+                button.style.transform += ' scale(1.1)'; // Увеличиваем кнопку
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
