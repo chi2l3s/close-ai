@@ -41,8 +41,8 @@
             transform-origin: center;
             transition: all 500ms ease, opacity 0.5s ease, transform 0.5s ease; /* Плавный переход для opacity и transform */
             position: absolute;
-            top: 48%; /* Центрируем по вертикали */
-            left: 42%; /* Центрируем по горизонтали */
+            top: 50%; /* Центрируем по вертикали */
+            left: 50%; /* Центрируем по горизонтали */
             text-align: center;
         }
         #try-button:hover {
@@ -65,15 +65,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        const layers = 20; // Количество слоев
+        const layers = 15; // Количество слоев
         const planes = [];
         const planeWidth = window.innerWidth;
-        const planeHeight = 10; // Высота плоскости
+        const planeHeight = 20; // Высота плоскости
 
         for (let i = 0; i < layers; i++) {
             const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight, 100, 100);
@@ -88,7 +88,7 @@
         }
 
         // Создание призмы
-        const prismGeometry = new THREE.CylinderGeometry(1, 1, 3, 4);
+        const prismGeometry = new THREE.CylinderGeometry(1, 1, 3);
         const prismMaterial = new THREE.MeshBasicMaterial({ color: '#8312d5', wireframe: true });
         const prism = new THREE.Mesh(prismGeometry, prismMaterial);
         scene.add(prism);
@@ -97,7 +97,7 @@
 
         function animate() {
             requestAnimationFrame(animate);
-            const time = Date.now() * 0.001; // Уменьшаем скорость времени
+            const time = Date.now() * 0.0005; // Уменьшаем скорость времени
 
             planes.forEach((plane, index) => {
                 const positionAttribute = plane.geometry.attributes.position;
@@ -113,12 +113,12 @@
 
                 // Изменяем цвет в зависимости от высоты
                 const colorValue = (Math.sin(time + index) + 1) / 2;
-                plane.material.color = new THREE.Color(colorValue, 0.5, 1 - colorValue);
+                plane.material.color = new THREE.Color(colorValue, 0, 3 - colorValue);
             });
 
             // Вращение и пульсация призмы
             prism.rotation.y += 0.01; // Вращение
-            const scale = 1 + 0.1 * Math.sin(time); // Пульсация
+            const scale = 1 + 0.3 * Math.sin(time); // Пульсация
             prism.scale.set(scale, scale, scale);
 
             renderer.render(scene, camera);
