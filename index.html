@@ -16,7 +16,7 @@
             opacity: 0; /* Скрываем заголовок изначально */
             transition: top 0.5s ease, opacity 0.5s ease; /* Плавный переход для top и opacity */
             padding: 20px;
-            width: 80%; /* Ширина заголовка */
+            width: 90%; /* Ширина заголовка адаптирована для мобильных */
             text-align: center; /* Центрируем текст */
             color: white; /* Цвет текста заголовка */
         }
@@ -24,9 +24,10 @@
             margin: 10px 0;
         }
         nav a {
-            margin: 0 15px;
+            margin: 0 10px; /* Уменьшено для мобильных */
             text-decoration: none;
             color: white; /* Цвет ссылок в навигации */
+            font-size: 14px; /* Размер шрифта для мобильных */
         }
         #try-button {
             padding: 10px 20px;
@@ -38,12 +39,25 @@
             cursor: pointer;
             opacity: 0; /* Скрываем кнопку изначально */
             transform-origin: center;
-            transition: opacity 0.9s ease, transform 0.9s ease; /* Плавный переход для opacity и transform */
+            transition: all 500ms ease, opacity 0.5s ease, transform 0.5s ease; /* Плавный переход для opacity и transform */
             position: absolute;
-            top: 50%; /* Центрируем по вертикали */
-            left: 50%; /* Центрируем по горизонтали */
-            transform: translate(-50%, -50%); /* Центрируем кнопку */
+            top: 48%; /* Центрируем по вертикали */
+            left: 42%; /* Центрируем по горизонтали */
             text-align: center;
+        }
+        #try-button:hover {
+            font-size: 20px;
+            background-color: #b48ead;
+        }
+        @media (max-width: 600px) {
+            header {
+                font-size: 16px; /* Уменьшаем размер шрифта для заголовка */
+                padding: 10px; /* Уменьшаем отступы */
+            }
+            #try-button {
+                font-size: 14px; /* Уменьшаем размер шрифта для кнопки */
+                padding: 8px 16px; /* Уменьшаем отступы кнопки */
+            }
         }
     </style>
 </head>
@@ -56,10 +70,10 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        const layers = 5; // Количество слоев
+        const layers = 20; // Количество слоев
         const planes = [];
         const planeWidth = window.innerWidth;
-        const planeHeight = 5; // Высота плоскости
+        const planeHeight = 10; // Высота плоскости
 
         for (let i = 0; i < layers; i++) {
             const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight, 100, 100);
@@ -68,7 +82,7 @@
                 wireframe: true 
             });
             const plane = new THREE.Mesh(geometry, material);
-            plane.position.z = i * 0.2; // Смещение по оси Z для создания объема
+            plane.position.z = i * 0.5; // Смещение по оси Z для создания объема
             scene.add(plane);
             planes.push(plane);
         }
@@ -127,7 +141,7 @@
         <h1><strong>closeai</strong></h1>
         <nav>
             <a href="#">Главная</a>
-            <a href="#">О нас</a>
+            <a href="#">U-GPT</a>
             <a href="#">Контакты</a>
         </nav>
     </header>
