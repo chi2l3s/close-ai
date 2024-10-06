@@ -35,14 +35,14 @@
             background-color: #8312d5;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 20px;
             cursor: pointer;
             opacity: 0; /* Скрываем кнопку изначально */
             transform-origin: center;
             transition: all 500ms ease, opacity 0.5s ease, transform 0.5s ease; /* Плавный переход для opacity и transform */
             position: absolute;
-            top: 50%; /* Центрируем по вертикали */
-            left: 50%; /* Центрируем по горизонтали */
+            top: 48%; /* Центрируем по вертикали */
+            left: 40%; /* Центрируем по горизонтали */
             text-align: center;
         }
         #try-button:hover {
@@ -146,7 +146,7 @@
         </nav>
     </header>
     
-    <button id="try-button">Try U-GPT</button>
+    <button id="try-button" onclick="window.location.href='/chat.html'">Try U-GPT</button>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
