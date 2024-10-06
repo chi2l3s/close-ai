@@ -145,7 +145,7 @@
                 });
 
                 const data = await response.json();
-                lastMessage += lastMessage + "."
+                lastMessage += messageText + "."
                 if (response.ok) {
                     addMessage('ai', data.response);
                     lastResponse += data.response + "."
