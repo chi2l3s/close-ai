@@ -141,14 +141,14 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ message: "Запрос: " + messageText + ". Предыдущий контекст: " + lastMessage + ". Твой предыдущий ответ: " + lastResponse }),
+                    body: JSON.stringify({ message: "Запрос: " + messageText + ". Предыдущий контекст: " + lastMessage + ". Твои предыдущие ответы: " + lastResponse }),
                 });
 
                 const data = await response.json();
-                lastMessage = messageText
+                lastMessage += lastMessage + "."
                 if (response.ok) {
                     addMessage('ai', data.response);
-                    lastResponse = data.response
+                    lastResponse += data.response + "."
                 } else {
                     addMessage('ai', data.error);
                 }
