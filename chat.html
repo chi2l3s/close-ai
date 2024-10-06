@@ -117,6 +117,7 @@
 
 <script type="module">
     let lastMessage
+    let lastResponse
     const chatBox = document.getElementById('chatBox');
     const userInput = document.getElementById('userInput');
     const sendButton = document.getElementById('sendButton');
@@ -140,13 +141,14 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ message: messageText + "" + lastMessage }),
+                    body: JSON.stringify({ message: "Запрос: " + messageText + ". Предыдущий контекст: " + lastMessage + ". Твой предыдущий ответ: " + lastResponse }),
                 });
 
                 const data = await response.json();
                 lastMessage = messageText
                 if (response.ok) {
                     addMessage('ai', data.response);
+                    lastResponse = data.response
                 } else {
                     addMessage('ai', data.error);
                 }
