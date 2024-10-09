@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>closeai | Main</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
         body { margin: 0; overflow: hidden; font-family: 'Montserrat', sans-serif; }
@@ -29,7 +30,15 @@
             color: white; /* Цвет ссылок в навигации */
             font-size: 14px; /* Размер шрифта для мобильных */
         }
-        #try-button {
+        .button-container {
+            position: absolute;
+            top: 50%; /* Центрирование по вертикали */
+            left: 50%; /* Центрирование по горизонтали */
+            transform: translate(-50%, -50%); /* Центрирование по горизонтали и вертикали */
+            display: flex; /* Используем Flexbox */
+            gap: 20px; /* Расстояние между кнопками */
+        }
+        #try-button, #ruscord-button {
             padding: 10px 20px;
             font-size: 16px;
             background-color: #8312d5;
@@ -37,26 +46,28 @@
             border: none;
             border-radius: 20px;
             cursor: pointer;
-            opacity: 0; /* Скрываем кнопку изначально */
-            transform-origin: center;
-            transition: all 500ms ease, opacity 0.5s ease, transform 0.5s ease; /* Плавный переход для opacity и transform */
-            position: absolute;
-            top: 50%; /* Центрируем по вертикали */
-            left: 50%; /* Центрируем по горизонтали */
+            opacity: 0;
+            transition: all 500ms ease, opacity 0.5s ease, transform 0.5s ease;
             text-align: center;
         }
-        #try-button:hover {
+
+        #try-button:hover, #ruscord-button:hover {
             font-size: 20px;
             background-color: #b48ead;
         }
+
+        .icon {
+            margin-right: 5px; /* Отступ между иконками и текстом */
+        }
+
         @media (max-width: 600px) {
             header {
                 font-size: 16px; /* Уменьшаем размер шрифта для заголовка */
                 padding: 10px; /* Уменьшаем отступы */
             }
-            #try-button {
-                font-size: 14px; /* Уменьшаем размер шрифта для кнопки */
-                padding: 8px 16px; /* Уменьшаем отступы кнопки */
+            #try-button, #ruscord-button {
+                font-size: 14px; /* Уменьшаем размер шрифта для кнопок */
+                padding: 8px 16px; /* Уменьшаем отступы кнопок */
             }
         }
     </style>
@@ -146,21 +157,42 @@
         </nav>
     </header>
     
-    <button id="try-button" onclick="window.location.href='/chat.html'">Try U-GPT</button>
+    <div class="button-container">
+        <button id="try-button" onclick="window.location.href='/chat.html'">
+            <i class="fas fa-robot icon"></i> Try U-GPT
+        </button>
+        <button id="ruscord-button" onclick="downloadFile()">
+            Ruscord Win
+            <i class="fa-brands fa-windows"></i>
+            <i class="fa-solid fa-download"></i>
+        </button>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const header = document.querySelector('header');
             const button = document.getElementById('try-button');
+            const ruscordButton = document.getElementById('ruscord-button');
 
             // Показать заголовок через 3 секунды
             setTimeout(() => {
                 header.style.top = '20px'; // Позиция заголовка при появлении
                 header.style.opacity = '1'; // Показываем заголовок
                 button.style.opacity = '1'; // Показываем кнопку
+                ruscordButton.style.opacity = '1'; // Показываем кнопку
                 button.style.transform += ' scale(1.1)'; // Увеличиваем кнопку
+                ruscordButton.style.transform += ' scale(1.1)'; // Увеличиваем кнопку
             }, 3000);
         });
+
+        function downloadFile() {
+            const link = document.createElement('a');
+            link.href = './assets/ruscord-Setup-1.0.0.exe'; // Замените на реальный путь к файлу
+            link.download = 'ruscord-Setup-1.0.0.exe'; // Имя загружаемого файла
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     </script>
 </body>
 </html>
